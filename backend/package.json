@@ -1,0 +1,26 @@
+{
+  "name": "car-wash",
+  "version": "0.0.1",
+  "description": "Web Application for Car Wash Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "createTables": "node ./src/scripts/createTables.js",
+    "launch-dev": "nodemon --inspect ./index.js"
+  },
+  "author": "Zhuo FENG",
+  "license": "WTFPL",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.8.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "sequelize": "^5.18.4",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "nodemon": "^1.19.2"
+  }
+}
