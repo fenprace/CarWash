@@ -1,8 +1,7 @@
 const Router = require('koa-router');
 const bcrypt = require('bcrypt');
 
-const SALT_ROUNDS = 8;
-
+const { SALT_ROUNDS } = require('../utils/constants');
 const User = require('../models/User');
 
 const router = new Router();
@@ -34,6 +33,8 @@ router.post('/', async ctx => {
       password: hashed,
       role: 1,
     });
+
+    ctx.status = 200;
   }
 });
 

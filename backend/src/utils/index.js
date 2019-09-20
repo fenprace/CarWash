@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = Date.now().toString();
+const { JWT_SECRET } = require('./constants');
 
 const jwtSign = (data, options) => {
   return new Promise((resolve, reject) => {
