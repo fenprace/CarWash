@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const bcrypt = require('bcrypt');
 
-const { jwtSign } = require('../utils');
+const { jwtSign } = require('../utils/jsonWebToken');
 const { InvalidParameterError, NoSuchUserError, IncorrectPasswordError } = require('../utils/errors');
 
 const User = require('../models/User');

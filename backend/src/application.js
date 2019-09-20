@@ -15,7 +15,6 @@ router.use('/session', sessionRouter.routes(), sessionRouter.allowedMethods());
 
 application.use(errorCode);
 application.use(authorization);
-
 application.use(bodyParser());
 application.use(router.routes());
 application.use(router.allowedMethods());

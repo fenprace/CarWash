@@ -9,8 +9,9 @@ class InvalidParameterError extends Error {
     this.name = 'InvalidParameterError';
     this.message = combineMessage(this.name, message);
     this.code = 1001;
+    this.status = 400;
   }
-};
+}
 
 class NoSuchUserError extends Error {
   constructor (message) {
@@ -18,8 +19,9 @@ class NoSuchUserError extends Error {
     this.name = 'NoSuchUserError';
     this.message = combineMessage(this.name, message);
     this.code = 2000;
+    this.status = 401;
   }
-};
+}
 
 class IncorrectPasswordError extends Error {
   constructor (message) {
@@ -27,21 +29,34 @@ class IncorrectPasswordError extends Error {
     this.name = 'IncorrectPasswordError';
     this.message = combineMessage(this.name, message);
     this.code = 2001;
+    this.status = 401;
   }
-};
+}
 
-class NoAuthorizationError extends Error {
+class NotAuthenticatedError extends Error {
   constructor (message) {
     super(message);
-    this.name = 'NoAuthorizationError';
+    this.name = 'NotAuthenticatedError';
     this.message = combineMessage(this.name, message);
     this.code = 2002;
+    this.status = 401;
   }
-};
+}
+
+class PermissionDeniedError extends Error {
+  constructor (message) {
+    super(message);
+    this.name = 'PermissionDeniedError';
+    this.message = combineMessage(this.name, message);
+    this.code = 2003;
+    this.status = 403;
+  }
+}
 
 module.exports = {
   InvalidParameterError,
   NoSuchUserError,
   IncorrectPasswordError,
-  NoAuthorizationError,
+  NotAuthenticatedError,
+  PermissionDeniedError,
 };

@@ -5,6 +5,7 @@ const { DATABASE_STORAGE } = require('./constants');
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: DATABASE_STORAGE,
+  logging: false,
 });
 
 module.exports = sequelize;

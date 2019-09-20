@@ -8,4 +8,4 @@ install:
   - cd backend/
   - npm install
 script:
-  - echo 'SKIPPING TESTS'
+  - npm run test

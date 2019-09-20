@@ -1,26 +1,21 @@
-const { NoAuthorizationError } = require('../utils/errors');
-const { jwtVerify } = require('../utils');
+const { NotAuthenticatedError } = require('../utils/errors');
+const { jwtVerify } = require('../utils/jsonWebToken');
 
 const authorization = async (ctx, next) => {
-  if (
+  if (!(
     ctx.url.match(/\/session\/?/i)
-    || ( ctx.url.match(/\/user\/?/i) && ctx.method === 'POST' )
-  ) {
-    await next();
-  } else {
-    // console.log(ctx.url);
-    // console.log(ctx.method);
-
+    || (ctx.method === 'POST' && ctx.url.match(/\/user\/?/i))
+  )) {
     const authorization = ctx.get('Authorization');
-    if (!authorization) throw new NoAuthorizationError();
+    if (!authorization) throw new NotAuthenticatedError();
 
     const token = authorization.slice(7);
     const jwtInfo = await jwtVerify(token);
 
     ctx.status.user = jwtInfo;
-
-    await next();
-  } 
+  }
+  
+  await next(); 
 };
 
 module.exports = authorization;

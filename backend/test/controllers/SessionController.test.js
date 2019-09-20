@@ -19,7 +19,7 @@ beforeAll(async (next) => {
 });
 
 describe('Test POST /session', () => {
-  test('Should return a token', async () => {
+  it('Should return a token', async () => {
     const response = await request(application.callback())
       .post('/session')
       .set('Accept', 'application/json')
@@ -34,14 +34,36 @@ describe('Test POST /session', () => {
     expect(body.token).toBeDefined();
   });
 
-  test('Should return failure', async () => {
+  it('Should return 400 with invalid parameters', async () => {
+    const response = await request(application.callback())
+      .post('/session')
+      .set('Accept', 'application/json')
+      .send({});
+
+    expect(response.status).toBe(400);
+  });
+
+  it('Should return 401 with an unregistered email', async () => {
     const response = await request(application.callback())
       .post('/session')
       .set('Accept', 'application/json')
       .send({
-        email: 'not an email',
+        email: 'noSuchAnEmail@email.com',
+        password: '00000000',
       });
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(401);
+  });
+
+  it('Should return 401 with an incorrect password', async () => {
+    const response = await request(application.callback())
+      .post('/session')
+      .set('Accept', 'application/json')
+      .send({
+        email: 'test@email.com',
+        password: 'notIncorrectAnyway',
+      });
+
+    expect(response.status).toBe(401);
   });
 });
