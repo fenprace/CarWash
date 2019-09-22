@@ -53,10 +53,20 @@ class PermissionDeniedError extends Error {
   }
 }
 
+class NotFoundError extends Error {
+  constructor (message) {
+    super(message);
+    this.name = 'NotFoundError';
+    this.message = combineMessage(this.name, message);
+    this.status = 404;
+  }
+}
+
 module.exports = {
   InvalidParameterError,
   NoSuchUserError,
   IncorrectPasswordError,
   NotAuthenticatedError,
   PermissionDeniedError,
+  NotFoundError,
 };

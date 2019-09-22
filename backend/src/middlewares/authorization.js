@@ -12,7 +12,7 @@ const authorization = async (ctx, next) => {
     const token = authorization.slice(7);
     const jwtInfo = await jwtVerify(token);
 
-    ctx.status.user = jwtInfo;
+    ctx.state.user = jwtInfo;
   }
   
   await next(); 

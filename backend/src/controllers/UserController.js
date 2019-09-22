@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const { SALT_ROUNDS } = require('../utils/constants');
 const User = require('../models/User');
-const { PermissionDeniedError, InvalidParameterError } = require('../utils/errors');
+const { PermissionDeniedError, InvalidParameterError, NotFoundError } = require('../utils/errors');
 
 const router = new Router();
 
@@ -26,7 +26,6 @@ router.get('/', async ctx => {
     data: result.rows,
     total: result.count,
   };
-
 });
 
 router.post('/', async ctx => {
@@ -44,7 +43,22 @@ router.post('/', async ctx => {
   });
 
   ctx.status = 200;
+});
 
+router.get('/:id', async ctx => {
+  if (!ctx.state.user) {
+    throw new PermissionDeniedError;
+  } else if (ctx.state.user.role === 1) {
+    throw new PermissionDeniedError;
+  }
+
+  const { id } = ctx.params;
+  if (!id) throw new InvalidParameterError;
+
+  const result = await User.findOne({ where: { id } });
+  if (!result) throw new NotFoundError;
+
+  ctx.body = { data: result.dataValues };
 });
 
 module.exports = router;
