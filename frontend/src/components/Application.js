@@ -3,6 +3,7 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { SnackbarProvider } from 'notistack';
 
 import store from '../redux/store';
 import history from '../utils/history';
@@ -20,18 +21,20 @@ const Application = () => {
   const classes = useStyles();
 
   return <Provider store={store}>
-    <Router history={history}>
-      <CssBaseline />
+    <SnackbarProvider>
+      <Router history={history}>
+        <CssBaseline />
 
-      <Header />
+        <Header />
 
-      <main className={classes.main}>
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path='/login' component={LogIn} />
-        </Switch>
-      </main>
-    </Router>
+        <main className={classes.main}>
+          <Switch>
+            <Route path='/' exact component={Home} />
+            <Route path='/login' component={LogIn} />
+          </Switch>
+        </main>
+      </Router>
+    </SnackbarProvider>
   </Provider>;
 };
 

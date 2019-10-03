@@ -1,7 +1,27 @@
 import axios from 'axios';
 
+import store from '../redux/store';
+
 const service = axios.create({
-  baseURL: 'http://localhost:3001'
+  baseURL: 'http://localhost:3001',
 });
+
+service.interceptors.request.use(config => {
+  const { token } = store.getState();
+
+  if (token) config.headers.common['Authorization'] = `Bearer ${token}`;
+
+  return config;
+});
+
+service.interceptors.response.use(
+  response => response.data,
+  error => {
+    const { response } = error;
+    const { data } = response;
+    if (data && data.message) return Promise.reject(new Error(data.message));
+    return Promise.reject(error);
+  }
+);
 
 export default service;

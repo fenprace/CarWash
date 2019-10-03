@@ -30,6 +30,7 @@
     "html-webpack-template": "^6.2.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "notistack": "^0.9.2",
     "prop-types": "^15.7.2",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",

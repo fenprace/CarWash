@@ -8,6 +8,7 @@ import Fab from '@material-ui/core/Fab';
 import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import ForwardIcon from '@material-ui/icons/Forward';
+import { withSnackbar } from 'notistack';
 
 import { logIn } from '../services/UserService';
 import { UPDATE_TOKEN } from '../redux/actionTypes';
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LogIn = (props) => {
-  const { dispatch } = props;
+  const { dispatch, enqueueSnackbar } = props;
 
   const classes = useStyles();
 
@@ -40,7 +41,12 @@ const LogIn = (props) => {
         const { token } = data;
         dispatch({ type: UPDATE_TOKEN, payload: { token } });
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        enqueueSnackbar(error.message, {
+          variant: 'error',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      });
   };
 
   return (
@@ -91,6 +97,7 @@ const LogIn = (props) => {
 
 LogIn.propTypes = {
   dispatch: PropTypes.func,
+  enqueueSnackbar: PropTypes.func,
 };
 
-export default connect()(LogIn);
+export default withSnackbar(connect()(LogIn));
