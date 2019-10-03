@@ -7,15 +7,19 @@ branches:
   only:
   - master
 install:
-- cd backend/
+- cd backend
 - npm install
-- cd ../frontend
+- cd ..
+- cd frontend
 - npm install
+- cd ..
 script:
+- cd backend
 - npm run test
+- cd ..
 before_install:
 - openssl aes-256-cbc -K $encrypted_3b056051d907_key -iv $encrypted_3b056051d907_iv
-  -in deploy_rsa.enc -out deploy_rsa -d
-- chmod 600 deploy_rsa
+  -in deploy_rsa.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
 after_success:
 - ssh www@gabrielndavid.live -o StrictHostKeyChecking=no './deploy.sh'
