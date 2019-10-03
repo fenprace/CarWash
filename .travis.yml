@@ -22,4 +22,4 @@ before_install:
   -in deploy_rsa.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 after_success:
-- ssh www@gabrielndavid.live -o StrictHostKeyChecking=no './deploy.sh'
+- ssh www@gabrielndavid.live -o StrictHostKeyChecking=no 'cd ~/CarWash && ./deploy.sh'
