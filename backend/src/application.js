@@ -2,6 +2,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const Router = require('koa-router');
 
+const crossOrigin = require('./middlewares/crossOrigin');
 const errorCode = require('./middlewares/errorCode');
 const authorization = require('./middlewares/authorization');
 const userRouter = require('./controllers/UserController');
@@ -13,6 +14,7 @@ const router = new Router();
 router.use('/user', userRouter.routes(), userRouter.allowedMethods());
 router.use('/session', sessionRouter.routes(), sessionRouter.allowedMethods());
 
+application.use(crossOrigin);
 application.use(errorCode);
 application.use(authorization);
 application.use(bodyParser());

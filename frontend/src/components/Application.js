@@ -1,8 +1,10 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import store from '../redux/store';
 import history from '../utils/history';
 import Header from './Header';
 import Home from '../containers/Home';
@@ -17,18 +19,20 @@ const useStyles = makeStyles(theme => ({
 const Application = () => {
   const classes = useStyles();
 
-  return <Router history={history}>
-    <CssBaseline />
+  return <Provider store={store}>
+    <Router history={history}>
+      <CssBaseline />
 
-    <Header />
+      <Header />
 
-    <main className={classes.main}>
-      <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/login' component={LogIn} />
-      </Switch>
-    </main>
-  </Router>;
+      <main className={classes.main}>
+        <Switch>
+          <Route path='/' exact component={Home} />
+          <Route path='/login' component={LogIn} />
+        </Switch>
+      </main>
+    </Router>
+  </Provider>;
 };
 
 export default Application;
