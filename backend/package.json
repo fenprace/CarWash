@@ -7,7 +7,7 @@
     "test": "NODE_ENV=test npx jest",
     "recreate": "node ./src/scripts/recreate.js",
     "launch-dev": "NODE_ENV=dev nodemon --inspect ./src/index.js",
-    "launch-prod": "NODE_ENV=production npx pm2 start ./src/index.js"
+    "launch-prod": "NODE_ENV=production npx pm2 start ./src/index.js -i max"
   },
   "author": "Zhuo FENG",
   "license": "WTFPL",
