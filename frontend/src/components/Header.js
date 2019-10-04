@@ -4,6 +4,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -11,7 +14,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = () => {
+const Header = (props) => {
+  const { token } = props;
   const classes = useStyles();
 
   return (
@@ -20,10 +24,25 @@ const Header = () => {
         <Typography variant='h6' className={classes.title}>
           Gabriel & David
         </Typography>
-        <Button color='inherit'>Log In</Button>
+
+        {
+          token
+            ? null
+            : <Button
+            color='inherit'
+            to='/login'
+            component={Link}
+          >
+            Log In 
+          </Button>
+        }
       </Toolbar>
     </AppBar>
   );
 };
 
-export default Header;
+Header.propTypes = {
+  token: PropTypes.string,
+}
+
+export default connect(({ token }) => ({ token }))(Header);
