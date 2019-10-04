@@ -3,7 +3,7 @@ import axios from 'axios';
 import store from '../redux/store';
 
 const service = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'http://gabrielndavid.live/api',
 });
 
 service.interceptors.request.use(config => {
@@ -18,9 +18,11 @@ service.interceptors.response.use(
   response => response.data,
   error => {
     const { response } = error;
+    if (!response) return Promise.reject(error);
+
     const { data } = response;
-    if (data && data.message) return Promise.reject(new Error(data.message));
-    return Promise.reject(error);
+    if (!data || !data.message) return Promise.reject(error);
+    return Promise.reject(new Error(data.message));
   }
 );
 

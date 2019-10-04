@@ -2,17 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useForm from 'react-hook-form';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Fab from '@material-ui/core/Fab';
-import MuiLink from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
-import ForwardIcon from '@material-ui/icons/Forward';
+import Button from '@material-ui/core/Button';
 import { withSnackbar } from 'notistack';
 
-import { logIn } from '../services/UserService';
-import { UPDATE_TOKEN } from '../redux/actionTypes';
+import history from '../utils/history';
+import UserService from '../services/UserService';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -23,11 +20,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
     display: 'flex',
     justifyContent: 'space-between',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
   }
 }));
 
-const LogIn = (props) => {
+const Register = (props) => {
   const { dispatch, enqueueSnackbar } = props;
 
   const classes = useStyles();
@@ -36,12 +34,11 @@ const LogIn = (props) => {
     mode: 'onSubmit',
   });
 
-  const handleLogIn = ({ email, password }) => {
-    logIn({ email, password })
-      .then(data => {
-        const { token } = data;
-        dispatch({ type: UPDATE_TOKEN, payload: { token } });
-        enqueueSnackbar('Log In Successfully.', {
+  const handleRegister = ({ email, password, name, tel }) => {
+    UserService.register({ email, password, name, tel })
+      .then(() => {
+        history.push('/login');
+        enqueueSnackbar('Register Successfully.', {
           variant: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'center' },
         });
@@ -56,7 +53,21 @@ const LogIn = (props) => {
 
   return (
     <Container maxWidth='xs'>
-      <form onSubmit={handleSubmit(handleLogIn)}>
+      <form onSubmit={handleSubmit(handleRegister)}>
+      <TextField
+          autoFocus
+          fullWidth
+          autoComplete='name'
+          id='name'
+          label='Full Name'
+          name='name'
+          margin='normal'
+          variant='outlined'
+          inputRef={register({ required: true })}
+          error={!!errors.name}
+          helperText={errors.name && 'Please input your full name.'}
+        />
+
         <TextField
           fullWidth
           autoComplete='email'
@@ -65,6 +76,7 @@ const LogIn = (props) => {
           name='email'
           margin='normal'
           variant='outlined'
+          className={classes.textField}
           inputRef={register({ required: true, pattern: /\S+@\S+\.\S+/ })}
           error={!!errors.email}
           helperText={errors.email && 'Please input a valid email.'}
@@ -72,7 +84,7 @@ const LogIn = (props) => {
 
         <TextField
           fullWidth
-          autoComplete='current-password'
+          autoComplete='new-password'
           id='password'
           label='Password'
           margin='normal'
@@ -80,30 +92,38 @@ const LogIn = (props) => {
           type='password'
           variant='outlined'
           className={classes.textField}
-          inputRef={register({ required: true })}
+          inputRef={register({ required: true, minLength: 8 })}
           error={!!errors.password}
-          helperText={errors.password && 'Please input your password.'}
+          helperText={errors.password && 'Your password is too short.'}
+        />
+
+        <TextField
+          fullWidth
+          autoComplete='tel'
+          id='tel'
+          label='Telephone Number'
+          margin='normal'
+          name='tel'
+          type='textField'
+          variant='outlined'
+          className={classes.textField}
+          inputRef={register({ required: true })}
+          error={!!errors.tel}
+          helperText={errors.tel && 'Please input your telephone number.'}
         />
 
         <div className={classes.box}>
-          <MuiLink component='span'>
-            <Link to='/register'>
-              Do not have an account? Register
-            </Link>
-          </MuiLink>
-
-          <Fab color='primary' type='submit'>
-            <ForwardIcon />
-          </Fab>
+          <Button variant='contained' color='primary' type='submit'>Register</Button>
         </div>
+        
       </form>
     </Container>
   );
 };
 
-LogIn.propTypes = {
+Register.propTypes = {
   dispatch: PropTypes.func,
   enqueueSnackbar: PropTypes.func,
 };
 
-export default withSnackbar(connect()(LogIn));
+export default withSnackbar(connect()(Register));

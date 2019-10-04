@@ -10,6 +10,7 @@ import history from '../utils/history';
 import Header from './Header';
 import Home from '../containers/Home';
 import LogIn from '../containers/LogIn';
+import Register from '../containers/Register';
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -31,6 +32,7 @@ const Application = () => {
           <Switch>
             <Route path='/' exact component={Home} />
             <Route path='/login' component={LogIn} />
+            <Route path='/register' component={Register} />
           </Switch>
         </main>
       </Router>

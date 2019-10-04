@@ -8,4 +8,4 @@ pm2 restart all
 cd ../frontend
 npm install
 npm run build
-echo 'Deploy Successfully'
+echo 'Deploy Successfully.'
