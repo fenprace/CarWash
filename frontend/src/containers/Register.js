@@ -34,8 +34,8 @@ const Register = (props) => {
     mode: 'onSubmit',
   });
 
-  const handleRegister = ({ email, password, name, tel }) => {
-    UserService.register({ email, password, name, tel })
+  const handleRegister = ({ email, password }) => {
+    UserService.register({ email, password })
       .then(() => {
         history.push('/login');
         enqueueSnackbar('Register Successfully.', {
@@ -54,20 +54,6 @@ const Register = (props) => {
   return (
     <Container maxWidth='xs'>
       <form onSubmit={handleSubmit(handleRegister)}>
-      <TextField
-          autoFocus
-          fullWidth
-          autoComplete='name'
-          id='name'
-          label='Full Name'
-          name='name'
-          margin='normal'
-          variant='outlined'
-          inputRef={register({ required: true })}
-          error={!!errors.name}
-          helperText={errors.name && 'Please input your full name.'}
-        />
-
         <TextField
           fullWidth
           autoComplete='email'
@@ -97,25 +83,9 @@ const Register = (props) => {
           helperText={errors.password && 'Your password is too short.'}
         />
 
-        <TextField
-          fullWidth
-          autoComplete='tel'
-          id='tel'
-          label='Telephone Number'
-          margin='normal'
-          name='tel'
-          type='textField'
-          variant='outlined'
-          className={classes.textField}
-          inputRef={register({ required: true })}
-          error={!!errors.tel}
-          helperText={errors.tel && 'Please input your telephone number.'}
-        />
-
         <div className={classes.box}>
           <Button variant='contained' color='primary' type='submit'>Register</Button>
         </div>
-        
       </form>
     </Container>
   );
