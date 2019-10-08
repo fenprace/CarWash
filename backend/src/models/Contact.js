@@ -5,6 +5,7 @@ const Contact = database.define('contact', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
+    autoIncrement: true,
   },
   street: {
     type: Sequelize.TEXT,

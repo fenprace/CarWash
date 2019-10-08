@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const { jwtSign } = require('../src/utils/jsonWebToken');
-const { User } = require('../src/models');
+const { User, Vehicle } = require('../src/models');
 
 const createToken = async (id, role) => {
   return await jwtSign(
@@ -14,15 +14,17 @@ const createOneUser = async (options) => {
   const password = '00000000';
   const hashed = await bcrypt.hash(password, 8);
 
-  await User.create({
+  const user = await User.create({
     ...options,
     password: hashed,
   });
 
+  const { id } = user;
+
   return {
     ...options,
-    password,
-    token: await createToken(0, options.role),
+    user, id, password,
+    token: await createToken(id, options.role),
   };
 };
 
@@ -44,7 +46,24 @@ const createOneManager = async () => {
   return await createOneUser(options);
 };
 
+const createOneCustomerWithOneVehicle = async () => {
+  const options = {
+    email: 'customerWithOneVehicle@email.com',
+    role: 1,
+  };
+
+  const user = await createOneUser(options);
+  const vehicle = await Vehicle.create({
+    vehicleType: 0,
+    description: 'My First Car.',
+  });
+
+  await user.user.addVehicle(vehicle);
+  return user;
+};
+
 module.exports = {
   createOneCustomer,
-  createOneManager
+  createOneManager,
+  createOneCustomerWithOneVehicle,
 };

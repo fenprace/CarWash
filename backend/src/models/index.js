@@ -2,6 +2,8 @@ const User = require('./User');
 const Contact = require('./Contact');
 const Vehicle = require('./Vehicle');
 
+User.hasMany(Contact);
+User.hasMany(Vehicle);
 Contact.belongsTo(User);
 Vehicle.belongsTo(User);
 

@@ -1,7 +1,7 @@
 const request = require('supertest');
 
-const application = require('../../src/application');
 const { User } = require('../../src/models');
+const application = require('../../src/application');
 const { createOneCustomer, createOneCustomerWithOneVehicle, createOneManager } = require('../helpers');
 
 let customer = null;
@@ -16,10 +16,10 @@ beforeAll(async next => {
   next();
 });
 
-describe('Test GET /user', () => {
+describe('Test GET /user/:id/vehicle', () => {
   it('Should return 401 with no authorization', async () => {
     const response = await request(application.callback())
-      .get('/user')
+      .get(`/user/${customer.id}/vehicle`)
       .set('Accept', 'application/json');
 
     expect(response.status).toBe(401);
@@ -27,57 +27,27 @@ describe('Test GET /user', () => {
 
   it('Should return 403 when accessed as a user without privileges', async () => {
     const response = await request(application.callback())
-      .get('/user')
+      .get(`/user/${customerWithOneVehicle.id}/vehicle`)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${customer.token}`);
     
     expect(response.status).toBe(403);
   });
 
-  it('Should return a user list', async () => {
+  it('Should return a list of vehicles', async () => {
     const response = await request(application.callback())
-      .get('/user')
+      .get(`/user/${customerWithOneVehicle.id}/vehicle`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${manager.token}`);
+      .set('Authorization', `Bearer ${customerWithOneVehicle.token}`);
     
     expect(response.status).toBe(200);
   });
 });
 
-describe('Test POST /user', () => {
-  it('Should return 400 with invalid parameters', async () => {
-    const response = await request(application.callback())
-      .post('/user')
-      .send({})
-      .set('Accept', 'application/json');
-
-    expect(response.status).toBe(400);
-  });
-
-  it('Should create a normal user', async () => {
-    const response = await request(application.callback())
-      .post('/user')
-      .send({
-        email: 'test2@email.com',
-        password: '00000000',
-      })
-      .set('Accept', 'application/json');
-
-    expect(response.status).toBe(200);
-    
-    const result = await User.findOne({
-      where: { email: 'test2@email.com' }
-    });
-
-    expect(result.dataValues).toBeDefined();
-    expect(result.dataValues.role).toBe(1);
-  });
-});
-
-describe('Test GET /user/:id', () => {
+describe('Test POST /user/:id/vehicle', () => {
   it('Should return 401 with no authorization', async () => {
     const response = await request(application.callback())
-      .get('/user/1')
+      .post(`/user/${customer.id}/vehicle`)
       .set('Accept', 'application/json');
 
     expect(response.status).toBe(401);
@@ -85,29 +55,38 @@ describe('Test GET /user/:id', () => {
 
   it('Should return 403 when accessed as a user without privileges', async () => {
     const response = await request(application.callback())
-      .get('/user/1')
+      .post(`/user/${customerWithOneVehicle.id}/vehicle`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${customerWithOneVehicle.token}`);
-
+      .set('Authorization', `Bearer ${customer.token}`);
+    
     expect(response.status).toBe(403);
   });
 
-  it('Should return 404 with an unexisted id', async () => {
+  it('Should return 400 with invalid parameters', async () => {
     const response = await request(application.callback())
-      .get('/user/999')
+      .post(`/user/${customer.id}/vehicle`)
+      .send({})
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${manager.token}`);
+      .set('Authorization', `Bearer ${customer.token}`);
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
   });
 
-  it('Should return a user', async () => {
+  it('Should add a vehicle', async () => {
     const response = await request(application.callback())
-      .get('/user/1')
+      .post(`/user/${customer.id}/vehicle`)
+      .send({
+        vehicleType: 1,
+        description: 'Nice Car!',
+      })
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${manager.token}`);
+      .set('Authorization', `Bearer ${customer.token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.data.id).toBe(1);
+    
+    const user = await User.findByPk(customer.id);
+
+    expect(user.dataValues).toBeDefined();
+    // expect(.dataValues.role).toBe(1);
   });
 });
