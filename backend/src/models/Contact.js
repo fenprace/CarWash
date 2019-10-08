@@ -1,24 +1,35 @@
 const Sequelize = require('sequelize');
 const database = require('../utils/database');
 
-const User = database.define('user', {
+const Contact = database.define('contact', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
   },
-  role: {
+  street: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  suburb: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  state: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  postalCode: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  email: {
+  telephoneNumber: {
     type: Sequelize.TEXT,
-    unique: true,
     allowNull: false,
-    validate: {
-      isEmail: true,
-    }
   },
-  password: {
+  telephoneType: {
+    type: Sequelize.INTEGER,
+  },
+  name: {
     type: Sequelize.TEXT,
     allowNull: false,
   },
@@ -27,4 +38,4 @@ const User = database.define('user', {
   timestamps: true,
 });
 
-module.exports = User;
+module.exports = Contact;

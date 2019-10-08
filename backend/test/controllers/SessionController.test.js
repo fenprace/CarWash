@@ -2,7 +2,7 @@ const request = require('supertest');
 const bcrypt = require('bcrypt');
 
 const application = require('../../src/application');
-const User = require('../../src/models/User');
+const { User } = require('../../src/models');
 
 beforeAll(async (next) => {
   const hashed = await bcrypt.hash('00000000', 8);

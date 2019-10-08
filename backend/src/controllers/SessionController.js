@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const { jwtSign } = require('../utils/jsonWebToken');
 const { InvalidParameterError, NoSuchUserError, IncorrectPasswordError } = require('../utils/errors');
 
-const User = require('../models/User');
+const { User } = require('../models');
 
 const router = new Router();
 

@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const { jwtSign } = require('../src/utils/jsonWebToken');
-const User = require('../src/models/User');
+const { User } = require('../src/models');
 
 const createToken = async (id, role) => {
   return await jwtSign(
@@ -29,8 +29,6 @@ const createOneUser = async (options) => {
 const createOneCustomer = async () => {
   const options = {
     email: 'customer@email.com',
-    name: 'Customer',
-    tel: '0000000000',
     role: 1,
   };
 
@@ -40,8 +38,6 @@ const createOneCustomer = async () => {
 const createOneManager = async () => {
   const options = {
     email: 'manager@email.com',
-    name: 'Manager',
-    tel: '0000000000',
     role: 0,
   };
 

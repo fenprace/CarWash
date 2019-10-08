@@ -1,30 +1,21 @@
 const Sequelize = require('sequelize');
 const database = require('../utils/database');
 
-const User = database.define('user', {
+const Vehicle = database.define('vehicle', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
   },
-  role: {
+  vehicleType: {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  email: {
+  description: {
     type: Sequelize.TEXT,
-    unique: true,
-    allowNull: false,
-    validate: {
-      isEmail: true,
-    }
-  },
-  password: {
-    type: Sequelize.TEXT,
-    allowNull: false,
   },
 }, {
   freezeTableName: true,
   timestamps: true,
 });
 
-module.exports = User;
+module.exports = Vehicle;

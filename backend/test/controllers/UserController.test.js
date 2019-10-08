@@ -1,7 +1,7 @@
 const request = require('supertest');
 
 const application = require('../../src/application');
-const User = require('../../src/models/User');
+const { User } = require('../../src/models');
 const { createOneCustomer, createOneManager } = require('../helpers');
 
 let customer = null;

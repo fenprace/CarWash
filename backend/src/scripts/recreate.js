@@ -1,7 +1,11 @@
 const sqlite = require('sqlite3');
 
-const User = require('../models/User');
+const { User, Contact, Vehicle } = require('../models');
 
-new sqlite.Database('./database.sqlite'); // Create a database if it does not exist
+// Create a database if it does not exist
+new sqlite.Database('./database.sqlite');
 
-User.sync({ force: true }); // Drop and Create the table
+// Drop and Create the table
+User.sync({ force: true });
+Contact.sync({ force: true });
+Vehicle.sync({ force: true });

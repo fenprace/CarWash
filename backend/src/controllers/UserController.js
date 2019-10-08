@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const bcrypt = require('bcrypt');
 
 const { SALT_ROUNDS } = require('../utils/constants');
-const User = require('../models/User');
+const { User } = require('../models');
 const { PermissionDeniedError, InvalidParameterError, NotFoundError } = require('../utils/errors');
 
 const router = new Router();
