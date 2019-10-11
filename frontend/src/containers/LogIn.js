@@ -40,6 +40,7 @@ const LogIn = (props) => {
     logIn({ email, password })
       .then(data => {
         const { token } = data;
+        window.localStorage.setItem('token', token);
         dispatch({ type: UPDATE_TOKEN, payload: { token } });
         enqueueSnackbar('Log In Successfully.', {
           variant: 'success',

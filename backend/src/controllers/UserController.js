@@ -54,7 +54,13 @@ router.get('/:id', async ctx => {
     throw new PermissionDeniedError;
   }
 
-  const result = await User.findOne({ where: { id } });
+  const result = await User.findOne({
+    where: { id },
+    include: [
+      { model: Vehicle },
+      { model: Contact },
+    ],
+  });
   if (!result) throw new NotFoundError;
 
   ctx.body = { data: result.dataValues };
@@ -145,7 +151,7 @@ router.post('/:id/contact', async ctx => {
   }, {});
 
   const contact = await Contact.create(contactData);
-  await user.AddContact(contact);
+  await user.addContact(contact);
   ctx.body = { data: contact.dataValues };
 });
 
