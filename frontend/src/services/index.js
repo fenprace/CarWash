@@ -4,6 +4,7 @@ import store from '../redux/store';
 
 const service = axios.create({
   baseURL: 'http://gabrielndavid.live/api',
+  // baseURL: 'http://localhost:3001',
 });
 
 service.interceptors.request.use(config => {

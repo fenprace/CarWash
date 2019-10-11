@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { UPDATE_TOKEN } from './actionTypes';
 
 const initalState = {
-  token: null,
+  token: window.localStorage.getItem('token') || null,
 };
 
 const reducer = (state, action) => {
