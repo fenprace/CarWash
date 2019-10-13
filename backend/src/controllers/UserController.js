@@ -1,8 +1,9 @@
 const Router = require('koa-router');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 const { SALT_ROUNDS } = require('../utils/constants');
-const { User, Vehicle, Contact } = require('../models');
+const { User, Vehicle, Contact, Appointment } = require('../models');
 const { PermissionDeniedError, InvalidParameterError, NotFoundError } = require('../utils/errors');
 
 const router = new Router();
@@ -59,6 +60,7 @@ router.get('/:id', async ctx => {
     include: [
       { model: Vehicle },
       { model: Contact },
+      { model: Appointment },
     ],
   });
   if (!result) throw new NotFoundError;
@@ -153,6 +155,76 @@ router.post('/:id/contact', async ctx => {
   const contact = await Contact.create(contactData);
   await user.addContact(contact);
   ctx.body = { data: contact.dataValues };
+});
+
+router.get('/:id/appointment', async ctx => {
+  const { id } = ctx.params;
+  if (!id) throw new InvalidParameterError;
+
+  if (!ctx.state.user) throw new PermissionDeniedError;
+  if (id != ctx.state.user.id && ctx.state.user.role != 0) {
+    throw new PermissionDeniedError;
+  }
+
+  const user = await User.findByPk(id);
+  
+  if (!user) throw new NotFoundError;
+
+  const appointments = await user.getAppointments({
+    include: [
+      { model: Vehicle },
+      { model: Contact },
+    ],
+  });
+
+  ctx.body = { data: appointments.map(v => v.dataValues) };
+});
+
+router.post('/:id/appointment', async ctx => {
+  const { id } = ctx.params;
+  if (!id) throw new InvalidParameterError;
+
+  if (!ctx.state.user) throw new PermissionDeniedError;
+  if (id != ctx.state.user.id && ctx.state.user.role != 0) {
+    throw new PermissionDeniedError;
+  }
+
+  if (!ctx.request.body) throw new InvalidParameterError;
+  const { body } = ctx.request;
+  const { appointmentType, description, time, contactId, vehicleIds } = body;
+
+  const user = await User.findByPk(id);
+  if (!user) throw new NotFoundError;
+
+  if (appointmentType === undefined || appointmentType === null) throw new InvalidParameterError;
+  if (contactId === undefined || contactId === null) throw new InvalidParameterError;
+  if (time === undefined || time === null) throw new InvalidParameterError;
+  if (vehicleIds === undefined || vehicleIds === null) throw new InvalidParameterError;
+
+  let date = null;
+
+  try {
+    date = moment(time).toDate();
+  } catch (e) {
+    throw new InvalidParameterError; 
+  }
+
+  const contact = await Contact.findByPk(contactId);
+  if (!contact) throw new NotFoundError;
+
+  const vehicles = vehicleIds.map(vid => {
+    if (!vid) throw new InvalidParameterError;
+    const v = Vehicle.findByPk(vid);
+    if (!v) throw new NotFoundError;
+    return v;
+  });
+
+  const appointment = await Appointment.create({ appointmentType, description, time: date });
+  appointment.setContact(contact);
+  appointment.addVehicles(vehicles);
+  user.addAppointment(appointment);
+
+  ctx.body = { data: appointment.dataValues };
 });
 
 module.exports = router;
