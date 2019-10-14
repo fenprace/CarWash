@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { removeToken } from '../redux/actions';
+import history from '../utils/history';
+
 const useStyles = makeStyles(() => ({
   title: {
     flexGrow: 1,
@@ -15,8 +18,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = (props) => {
-  const { token } = props;
+  const { dispatch, token } = props;
   const classes = useStyles();
+
+  const handleLogOut = () => {
+    dispatch(removeToken());
+    history.push('/');
+  };
 
   return (
     <AppBar position='static'>
@@ -27,14 +35,37 @@ const Header = (props) => {
 
         {
           token
-            ? null
-            : <Button
-            color='inherit'
-            to='/login'
-            component={Link}
-          >
-            Log In 
-          </Button>
+            ? <>
+              <Button
+                color='inherit'
+                to='/user/1'
+                component={Link}
+              >
+                Profile
+              </Button>
+              <Button
+                color='inherit'
+                onClick={handleLogOut}
+              >
+                Log Out
+              </Button>
+            </>
+            : <>
+              <Button
+                color='inherit'
+                to='/login'
+                component={Link}
+              >
+                Log In 
+              </Button>
+              <Button
+                color='inherit'
+                to='/register'
+                component={Link}
+              >
+                Register
+              </Button>
+            </>
         }
       </Toolbar>
     </AppBar>
@@ -42,7 +73,8 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
+  dispatch: PropTypes.func,
   token: PropTypes.string,
-}
+};
 
 export default connect(({ token }) => ({ token }))(Header);

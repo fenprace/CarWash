@@ -17,7 +17,7 @@ const renderContactListItemText = (contact) => <>
     primary={`${contact.name} · ${contact.telephoneNumber}`}
     secondary={<>
       {contact.street}
-      <Typography color='textSecondary'>
+      <Typography color='textSecondary' component='span' display='block' >
         {contact.suburb} {contact.state} {contact.postalCode}
       </Typography>
     </>}

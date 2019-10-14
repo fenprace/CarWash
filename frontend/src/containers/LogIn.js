@@ -12,7 +12,7 @@ import ForwardIcon from '@material-ui/icons/Forward';
 import { withSnackbar } from 'notistack';
 
 import { logIn } from '../services/UserService';
-import { UPDATE_TOKEN } from '../redux/actionTypes';
+import { updateToken } from '../redux/actions';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -40,8 +40,8 @@ const LogIn = (props) => {
     logIn({ email, password })
       .then(data => {
         const { token } = data;
-        window.localStorage.setItem('token', token);
-        dispatch({ type: UPDATE_TOKEN, payload: { token } });
+        dispatch(updateToken(token));
+
         enqueueSnackbar('Log In Successfully.', {
           variant: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'center' },

@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { UPDATE_TOKEN } from './actionTypes';
+import { UPDATE_TOKEN, REMOVE_TOKEN } from './actionTypes';
 
 const initalState = {
   token: window.localStorage.getItem('token') || null,
@@ -12,6 +12,8 @@ const reducer = (state, action) => {
   switch (action.type) {
   case UPDATE_TOKEN:
     return { ...state, token: action.payload.token };
+  case REMOVE_TOKEN:
+    return { ...state, token: null };
   default:
     return state;
   }

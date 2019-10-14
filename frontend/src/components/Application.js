@@ -11,6 +11,7 @@ import Header from './Header';
 import Home from '../containers/Home';
 import LogIn from '../containers/LogIn';
 import Register from '../containers/Register';
+import Book from '../containers/Book';
 import SingleUser from '../containers/SingleUser';
 
 const useStyles = makeStyles(theme => ({
@@ -34,6 +35,7 @@ const Application = () => {
             <Route path='/' exact component={Home} />
             <Route path='/login' component={LogIn} />
             <Route path='/register' component={Register} />
+            <Route path='/book' component={Book} />
             <Route path='/user/:id' component={SingleUser} />
           </Switch>
         </main>
