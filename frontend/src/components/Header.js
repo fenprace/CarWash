@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { removeToken } from '../redux/actions';
+import { removeUserData } from '../redux/actions';
 import history from '../utils/history';
 
 const useStyles = makeStyles(() => ({
@@ -22,7 +22,7 @@ const Header = (props) => {
   const classes = useStyles();
 
   const handleLogOut = () => {
-    dispatch(removeToken());
+    dispatch(removeUserData());
     history.push('/');
   };
 

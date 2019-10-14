@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
@@ -17,30 +16,16 @@ import VehicleList from '../components/VehicleList';
 import ContactList from '../components/ContactList';
 
 import { read } from '../services/UserService';
-
-const useData = () => {
-  const [isPending, setIsPending] = useState(true);
-  const [data, setData] = useState({});
-  return { isPending, setIsPending, data, setData };
-};
+import useRequest from '../hooks/useRequest';
 
 const SingleUser = (props) => {
   const { match } = props;
   const id = Number(match.params.id);
 
-  const {
-    isPending, setIsPending,
-    data: sourceData,
-    setData: setSourceData
-  } = useData();
+  const { isPending, sourceData, request } = useRequest(read);
 
   const readUser = id => {
-    setIsPending(true);
-    read({ id })
-      .then(data => {
-        setSourceData(data);
-        setIsPending(false);
-      });
+    request({ id });
   };
 
   const handleUpdate = () => {

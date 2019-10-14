@@ -1,2 +1,4 @@
 export const UPDATE_TOKEN = 'UPDATE_TOKEN';
 export const REMOVE_TOKEN = 'REMOVE_TOKEN';
+export const UPDATE_USER_DATA = 'UPDATE_USER_DATA';
+export const REMOVE_USER_DATA = 'REMOVE_USER_DATA';

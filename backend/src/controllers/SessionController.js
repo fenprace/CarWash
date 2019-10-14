@@ -14,23 +14,20 @@ router.post('/', async ctx => {
   const { email, password } = ctx.request.body;
   if (!(email && password)) throw new InvalidParameterError();
 
-  const result = await User.findOne({
+  const user = await User.findOne({
     attributes: ['id', 'password', 'role'],
     where: { email },
   });
-  if (!result) throw new NoSuchUserError();
+  if (!user) throw new NoSuchUserError();
 
-  const isPassed  = await bcrypt.compare(password, result.dataValues.password);
+  const { id, role, password: userPassword } = user.dataValues;
+
+  const isPassed  = await bcrypt.compare(password, userPassword);
   if (!isPassed) throw new IncorrectPasswordError();
 
-  const token = await jwtSign({
-    id: result.dataValues.id,
-    role: result.dataValues.role,
-  }, { expiresIn: '1d' });
+  const token = await jwtSign({ id, role }, { expiresIn: '1d' });
 
-  ctx.body = { 
-    token
-  };
+  ctx.body = { token, id, role };
 });
 
 module.exports = router;

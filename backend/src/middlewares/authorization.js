@@ -11,9 +11,13 @@ const authorization = async (ctx, next) => {
     if (!authorization) throw new NotAuthenticatedError();
 
     const token = authorization.slice(7);
-    const jwtInfo = await jwtVerify(token);
 
-    ctx.state.user = jwtInfo;
+    try {
+      const jwtInfo = await jwtVerify(token);
+      ctx.state.user = jwtInfo;
+    } catch (e) {
+      throw new NotAuthenticatedError();
+    }
   }
   
   await next(); 
