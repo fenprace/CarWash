@@ -4,7 +4,7 @@ const { jwtVerify } = require('../utils/jsonWebToken');
 const authorization = async (ctx, next) => {
   if (!(
     ctx.url.match(/\/session\/?/i)
-    || (ctx.method === 'OPTIONS' && ctx.url.match(/\/user\/?/i))
+    || (ctx.method === 'OPTIONS')
     || (ctx.method === 'POST' && ctx.url.match(/\/user\/?$/i))
   )) {
     const authorization = ctx.get('Authorization');

@@ -5,6 +5,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Radio from '@material-ui/core/Radio';
 
 import NotInterestedOutlinedIcon from '@material-ui/icons/NotInterestedOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
@@ -25,12 +27,13 @@ const renderContactListItemText = (contact) => <>
 </>;
 
 const ContactList = (props) => {
-  const { items, id, onUpdate } = props;
+  const { items, id, onUpdate, selectable, onSelect, selected } = props;
 
   const [showingDialog, setShowingDialog] = useState(false);
 
   const handleAddContact = () => setShowingDialog(true);
   const handleCloseContact = () => setShowingDialog(false);
+  const handleSelect = value => onSelect && onSelect(value);
 
   const addContactListItem = <>
     <ListItem
@@ -60,9 +63,24 @@ const ContactList = (props) => {
   return <>
     {
       items.map(i => {
-        return <ListItem key={i.id} alignItems='flex-start'>
+        return <ListItem
+          alignItems='flex-start'
+          key={i.id}
+          button={selectable}
+          onClick={() => handleSelect(i.id)}
+        >
           <ListItemIcon><ContactsOutlinedIcon /></ListItemIcon>
           {renderContactListItemText(i)}
+
+          {
+            selectable && <ListItemSecondaryAction>
+              <Radio
+                value={i.id}
+                checked={selected === i.id}
+                onChange={() => handleSelect(i.id)}
+              />
+            </ListItemSecondaryAction>
+          }
         </ListItem>;
       })
     }
@@ -74,6 +92,9 @@ ContactList.propTypes = {
   items: PropTypes.array,
   id: PropTypes.number,
   onUpdate: PropTypes.func,
+  selectable: PropTypes.bool,
+  onSelect: PropTypes.func,
+  selected: PropTypes.number,
 };
 
 

@@ -1,59 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
-import useRequest from '../hooks/useRequest';
-import { read } from '../services/UserService';
-import VehicleList from '../components/VehicleList';
-import ServiceList from '../components/ServiceList';
+import BookStep1 from './Steps/BookStep1';
+import BookStep2 from './Steps/BookStep2';
 
 const useStyles = makeStyles(theme => ({
-  subTitle: {
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(2),
-  },
-  mainCard: {
-    marginTop: theme.spacing(2),
-  },
   buttonSet: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
+    float: 'right',
   },
+  button: {
+    marginRight: theme.spacing(1),
+  }
 }));
 
 const Book = props => {
   const { id } = props;
   const classes = useStyles();
 
-  const { request: readUser, sourceData } = useRequest(read);
+  const [currentStep, setCurrentStep] = useState(0);
 
-  const [selectedService, setSelectedService] = useState(-1);
-  const [selectedVehicle, setSelectedVehicle] = useState(-1);
-
-  const handleUpdate = () => readUser({ id });
-  const handleChangeService = value => setSelectedService(value);
-  const handleChangeVehicle = value => setSelectedVehicle(value);
-
-  useEffect(() => {
-    readUser({ id });
-  }, []);
+  const stepList = useMemo(() => [
+    <BookStep1 key={0} id={id} />,
+    <BookStep2 key={1} id={id} />,
+  ], [id]);
 
   return <Container maxWidth='md'>
     <Paper>
-      <Stepper activeStep={0}>
+      <Stepper activeStep={currentStep}>
         <Step key={0}>
           <StepLabel>Select a Service</StepLabel>
         </Step>
@@ -68,34 +52,27 @@ const Book = props => {
       </Stepper>
     </Paper>
 
-    <Typography variant='h4' color='textSecondary' className={classes.subTitle}> Select a Service </Typography>
-
-    <Paper className={classes.mainCard}>
-      <List>
-        <ListSubheader>Select a Service</ListSubheader>
-        <ServiceList
-          selected={selectedService}
-          onSelect={handleChangeService}
-        />
-      </List>
-    </Paper>
-
-    <Paper className={classes.mainCard}>
-      <List>
-        <ListSubheader>Select your Vehicle</ListSubheader>
-        <VehicleList
-          selectable
-          selected={selectedVehicle}
-          onSelect={handleChangeVehicle}
-          onUpdate={handleUpdate}
-          items={sourceData.vehicles}
-          id={id}
-        />
-      </List>
-    </Paper>
-
+    { stepList[currentStep] }
+    
     <div className={classes.buttonSet}>
-      <Button variant='contained'>Next</Button>
+      {
+        currentStep > 0 && <Button
+          variant='contained'
+          className={classes.button}
+          onClick={() => setCurrentStep(step => step - 1)}>
+          Back
+        </Button>
+      }
+      {
+        currentStep < 2 && <Button
+          variant='contained'
+          color='primary'
+          className={classes.button}
+          onClick={() => setCurrentStep(step => step + 1)}>
+          Next
+        </Button>
+      }
+      
     </div>
     
   </Container>;

@@ -14,7 +14,7 @@ const router = new Router();
 
 router.use('/user', userRouter.routes(), userRouter.allowedMethods());
 router.use('/session', sessionRouter.routes(), sessionRouter.allowedMethods());
-router.use('/appointment', appointmentRouter.allowedMethods());
+router.use('/appointment', appointmentRouter.routes(), appointmentRouter.allowedMethods());
 
 application.use(crossOrigin);
 application.use(errorCode);

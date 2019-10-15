@@ -110,7 +110,7 @@ const ContactDialog = (props) => {
               margin='dense'
               variant='outlined'
               name='suburb'
-              autoComplete='shipping locality'
+              autoComplete='shipping address-level3'
               error={errors.suburb}
               onChange={e => updateAndValidate('suburb', e.target.value) }
               helperText={ errors.suburb && 'Pleas enter the suburb.' }
@@ -123,7 +123,7 @@ const ContactDialog = (props) => {
               margin='dense'
               variant='outlined'
               name='state'
-              autoComplete='shipping region'
+              autoComplete='shipping address-level2'
               error={errors.state}
               onChange={e => updateAndValidate('state', e.target.value) }
               helperText={ errors.state && 'Pleas enter the state.' }

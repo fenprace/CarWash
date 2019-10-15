@@ -31,4 +31,19 @@ router.get('/', async ctx => {
   };
 });
 
+router.get('/timeslot', async ctx => {
+  if (!ctx.state.user) {
+    throw new PermissionDeniedError;
+  }
+
+  const appointments = await Appointment.findAndCountAll({
+    limit: 100,
+    order: [['time', 'DESC']],
+    attributes: ['time'],
+  });
+
+  const timeSlots = appointments.rows.map(a => a.dataValues.time.toJSON());
+  ctx.body = { data: { timeSlots } };
+});
+
 module.exports = router;
