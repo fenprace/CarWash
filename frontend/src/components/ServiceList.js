@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -9,23 +9,7 @@ import Radio from '@material-ui/core/Radio';
 
 import LocalCarWashIcon from '@material-ui/icons/LocalCarWash';
 
-const services = [
-  {
-    appointmentType: 0,
-    primary: 'Wash Outside Only',
-    secondary: '$15',
-  },
-  {
-    appointmentType: 1,
-    primary: 'Wash Inside & Outside',
-    secondary: '$25',
-  },
-  {
-    appointmentType: 2,
-    primary: 'Deluxe Wash',
-    secondary: '$30',
-  },
-];
+import { APPOINTMENT_TYPE_LIST } from '../utils';
 
 const ServiceList = props => {
   const { onSelect, selected } = props;
@@ -36,7 +20,7 @@ const ServiceList = props => {
 
   return <>
     {
-      services.map(s => (
+      APPOINTMENT_TYPE_LIST.map(s => (
         <ListItem
           button
           key={s.appointmentType}

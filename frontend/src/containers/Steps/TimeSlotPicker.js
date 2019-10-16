@@ -30,6 +30,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TimeSlotPicker = props => {
+  const { onChange } = props;
+
   const classes = useStyles();
   const [timeString, setTimeString] = useState(null);
   const [pickedDate, setPickedDate] = useState(initalDate);
@@ -40,7 +42,9 @@ const TimeSlotPicker = props => {
     const hours = currentMoment.hours();
     const changedMoment = date.startOf('day').hours(hours).minutes(minutes);
     setPickedDate(date.toJSON());
-    setTimeString(changedMoment.toJSON());
+    const changedJSON = changedMoment.toJSON();
+    setTimeString(changedJSON);
+    onChange(changedJSON);
   };
 
   const handleChangeTime = time => {
@@ -48,7 +52,9 @@ const TimeSlotPicker = props => {
     const minutes = time.minutes();
     const hours = time.hours();
     const changedMoment = currentMoment.startOf('day').hours(hours).minutes(minutes);
-    setTimeString(changedMoment.toJSON());
+    const changedJSON = changedMoment.toJSON();
+    setTimeString(changedJSON);
+    onChange(changedJSON);
   };
 
   return <Paper className={classes.mainPaper}>
@@ -68,6 +74,10 @@ const TimeSlotPicker = props => {
       </List>
     </MuiPickersUtilsProvider>
   </Paper>;
+};
+
+TimeSlotPicker.propTypes = {
+  onChange: PropTypes.func,
 };
 
 export default TimeSlotPicker;

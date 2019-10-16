@@ -30,7 +30,7 @@ const TimePicker = props => {
   const { onChange } = props;
   const { sourceData, request } = useRequest(readTimeSlots);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const availableTimeSlots = useMemo(() => {
     const sourceTimeSlots = sourceData.timeSlots
