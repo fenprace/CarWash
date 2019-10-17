@@ -10,12 +10,12 @@ import useRequest from '../hooks/useRequest';
 import { readTimeSlots } from '../services/AppointmentService';
 
 const isAvailable = (time, timeSlots) => {
-  return timeSlots.every(slot => !time.isBetween(slot, slot.add(40, 'minutes')));
+  return timeSlots.every(slot => !time.isBetween(moment(slot), moment(slot).add(40, 'minutes'), null, '[]'));
 };
 
-const getAvailableTimeSlots = timeSlots =>{
-  const startTime = moment().startOf('day').add(9.5, 'hours');
-  const endTime = moment().startOf('day').add(16.5, 'hours').add(20, 'minutes');
+const getAvailableTimeSlots = (timeSlots, date) =>{
+  const startTime = moment(date.startOf('day').add(9.5, 'hours'));
+  const endTime = moment(date.startOf('day').add(16.5, 'hours').add(20, 'minutes'));
 
   const available = [];
 
@@ -27,18 +27,17 @@ const getAvailableTimeSlots = timeSlots =>{
 };
 
 const TimePicker = props => {
-  const { onChange } = props;
+  const { onChange, date } = props;
   const { sourceData, request } = useRequest(readTimeSlots);
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const availableTimeSlots = useMemo(() => {
-    const sourceTimeSlots = sourceData.timeSlots
-      ? sourceData.timeSlots.map(t => moment(t))
-      : [];
+    if (!sourceData.timeSlots) return [];
 
-    return getAvailableTimeSlots(sourceTimeSlots);
-  }, [sourceData]);
+    const sourceTimeSlots = sourceData.timeSlots.map(t => moment(t));
+    return getAvailableTimeSlots(sourceTimeSlots, moment(date));
+  }, [date, sourceData.timeSlots]);
 
   const handleChange = e => {
     const index = e.target.value;
@@ -67,6 +66,7 @@ const TimePicker = props => {
 
 TimePicker.propTypes = {
   onChange: PropTypes.func,
+  date: PropTypes.string,
 };
 
 export default TimePicker;

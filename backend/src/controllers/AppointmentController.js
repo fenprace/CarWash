@@ -1,7 +1,8 @@
 const Router = require('koa-router');
+const moment = require('moment');
 
 const { User, Vehicle, Contact, Appointment } = require('../models');
-const { PermissionDeniedError } = require('../utils/errors');
+const { PermissionDeniedError, InvalidParameterError, NotFoundError } = require('../utils/errors');
 
 const router = new Router();
 
@@ -42,8 +43,41 @@ router.get('/timeslot', async ctx => {
     attributes: ['time'],
   });
 
-  const timeSlots = appointments.rows.map(a => a.dataValues.time.toJSON());
+  const timeSlots = appointments.rows.map(a => moment(a.dataValues.time).toJSON());
   ctx.body = { data: { timeSlots } };
+});
+
+router.get('/:id', async ctx => {
+  const { id } = ctx.params;
+  if (!id) throw new InvalidParameterError;
+
+  if (!ctx.state.user) {
+    throw new PermissionDeniedError;
+  }
+
+  const appointment = await Appointment.findOne({
+    where: { id },
+    include: [
+      { model: User },
+      { model: Vehicle },
+      { model: Contact },
+    ],
+  });
+
+  if (!appointment) throw new NotFoundError;
+  if (ctx.state.user.id != appointment.user.id) throw new PermissionDeniedError;
+
+  const { appointmentType, time, description, id: _id } = appointment.dataValues;
+  const user = appointment.user.dataValues;
+  const contact = appointment.contact.dataValues;
+  const vehicles = appointment.vehicles.maps(v => v.dataValues);
+
+  ctx.body = {
+    data: {
+      appointmentType, time, description, user, contact, vehicles,
+      id: _id,
+    },
+  };
 });
 
 module.exports = router;

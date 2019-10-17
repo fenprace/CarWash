@@ -69,7 +69,7 @@ const TimeSlotPicker = props => {
         <ListItem>
           <ListItemIcon><ScheduleOutlinedIcon /></ListItemIcon>
           <ListItemText primary='We are going to wash your vehicle at' />
-          <TimePicker onChange={handleChangeTime} />
+          <TimePicker onChange={handleChangeTime} date={pickedDate} />
         </ListItem>
       </List>
     </MuiPickersUtilsProvider>

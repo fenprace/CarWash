@@ -212,11 +212,8 @@ router.post('/:id/appointment', async ctx => {
   const contact = await Contact.findByPk(contactId);
   if (!contact) throw new NotFoundError;
 
-  const vehicles = vehicleIds.map(vid => {
-    if (!vid) throw new InvalidParameterError;
-    const v = Vehicle.findByPk(vid);
-    if (!v) throw new NotFoundError;
-    return v;
+  const vehicles = await Vehicle.findAll({
+    where: { id: vehicleIds },
   });
 
   const appointment = await Appointment.create({ appointmentType, description, time: date });
