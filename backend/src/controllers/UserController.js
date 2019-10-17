@@ -5,6 +5,7 @@ const moment = require('moment');
 const { SALT_ROUNDS } = require('../utils/constants');
 const { User, Vehicle, Contact, Appointment } = require('../models');
 const { PermissionDeniedError, InvalidParameterError, NotFoundError } = require('../utils/errors');
+const { sendGreeting, sendAppointmentConfirmation } = require('../utils/mailer');
 
 const router = new Router();
 
@@ -42,6 +43,8 @@ router.post('/', async ctx => {
     password: hashed,
     role: 1,
   });
+
+  await sendGreeting({ id: email });
 
   ctx.status = 200;
 });
@@ -217,9 +220,15 @@ router.post('/:id/appointment', async ctx => {
   });
 
   const appointment = await Appointment.create({ appointmentType, description, time: date });
-  appointment.setContact(contact);
-  appointment.addVehicles(vehicles);
-  user.addAppointment(appointment);
+  await appointment.setContact(contact);
+  await appointment.addVehicles(vehicles);
+  await user.addAppointment(appointment);
+
+  await sendAppointmentConfirmation({
+    appointment, contact,
+    to: user.email,
+    vehicle: vehicles[0],
+  });
 
   ctx.body = { data: appointment.dataValues };
 });

@@ -27,7 +27,7 @@ const renderContactListItemText = (contact) => <>
 </>;
 
 const ContactList = (props) => {
-  const { items, id, onUpdate, selectable, onSelect, selected } = props;
+  const { items, id, onUpdate, selectable, onSelect, selected, displayAdd } = props;
 
   const [showingDialog, setShowingDialog] = useState(false);
 
@@ -84,7 +84,7 @@ const ContactList = (props) => {
         </ListItem>;
       })
     }
-    {addContactListItem}
+    {displayAdd === false || addContactListItem}
   </>;
 };
 
@@ -95,6 +95,7 @@ ContactList.propTypes = {
   selectable: PropTypes.bool,
   onSelect: PropTypes.func,
   selected: PropTypes.number,
+  displayAdd: PropTypes.bool,
 };
 
 

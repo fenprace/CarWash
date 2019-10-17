@@ -15,7 +15,7 @@ import VehicleDialog from './VehicleDialog';
 import { vehicleTypeToString } from '../utils';
 
 const VehicleList = (props) => {
-  const { items, id, onUpdate, selectable, onSelect, selected } = props;
+  const { items, id, onUpdate, selectable, onSelect, selected, displayAdd } = props;
 
   const [showingDialog, setShowingDialog] = useState(false);
 
@@ -70,7 +70,7 @@ const VehicleList = (props) => {
         </ListItem>;
       })
     }
-    {addVehicleListItem}
+    {displayAdd === false || addVehicleListItem}
   </>;
 };
 
@@ -81,6 +81,7 @@ VehicleList.propTypes = {
   selectable: PropTypes.bool,
   onSelect: PropTypes.func,
   selected: PropTypes.number,
+  displayAdd: PropTypes.bool,
 };
 
 export default VehicleList;

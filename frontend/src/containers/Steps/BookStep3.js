@@ -56,7 +56,7 @@ const BookStep3 = props => {
 
         <ListItem>
           <ListItemIcon><ScheduleOutlinedIcon /></ListItemIcon>
-          <ListItemText primary={`We are going to wash your vehicle at ${moment(appointment.time).format('hh:MM, MMMM Do, YYYY')}`} />
+          <ListItemText primary={`We are going to wash your vehicle at ${moment(appointment.time).format('HH:MM, dddd, MMMM Do, YYYY')}`} />
         </ListItem>
       </List>
     </Paper>

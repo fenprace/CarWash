@@ -13,6 +13,7 @@ import LogIn from '../containers/LogIn';
 import Register from '../containers/Register';
 import Book from '../containers/Book';
 import SingleUser from '../containers/SingleUser';
+import SingleAppointment from '../containers/SingleAppointment';
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -37,6 +38,7 @@ const Application = () => {
             <Route path='/register' component={Register} />
             <Route path='/book' component={Book} />
             <Route path='/user/:id' component={SingleUser} />
+            <Route path='/appointment/:id' component={SingleAppointment} />
           </Switch>
         </main>
       </Router>
