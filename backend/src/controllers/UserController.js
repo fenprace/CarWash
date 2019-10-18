@@ -178,7 +178,7 @@ router.get('/:id/appointment', async ctx => {
     where: { userId: user.id },
     limit: pageSize,
     offset: (page - 1) * pageSize,
-    order: [['id', 'DESC']],
+    order: [['time', 'DESC']],
     include: [
       { model: User },
       { model: Vehicle },

@@ -13,6 +13,7 @@ import { withSnackbar } from 'notistack';
 
 import { logIn } from '../services/UserService';
 import { updateUserData } from '../redux/actions';
+import history from '../utils/history';
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -46,6 +47,8 @@ const LogIn = (props) => {
           variant: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'center' },
         });
+
+        history.push('/book');
       })
       .catch(error => {
         enqueueSnackbar(error.message, {

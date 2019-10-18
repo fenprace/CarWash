@@ -12,6 +12,7 @@ import TimeSlotPicker from './TimeSlotPicker';
 import ButtonSet from './ButtonSet';
 import { read, bookAppointment } from '../../services/UserService';
 import useRequest from '../../hooks/useRequest';
+import history from '../../utils/history';
 
 const Book = props => {
   const { id, enqueueSnackbar } = props;
@@ -53,6 +54,7 @@ const Book = props => {
             variant: 'success',
             anchorOrigin: { vertical: 'top', horizontal: 'center' },
           });
+          history.push(`/user/${id}/appointment`);
         })
         .catch(error => {
           enqueueSnackbar(error.message, {

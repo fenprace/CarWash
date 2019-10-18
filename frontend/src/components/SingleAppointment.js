@@ -28,6 +28,8 @@ const SingleAppointment = (props) => {
       {
         displayView && <ListItemSecondaryAction>
           <Button
+            color='primary'
+            variant='outlined'
             component={Link}
             to={`/appointment/${aid}`}
           >View</Button>
@@ -70,7 +72,7 @@ const SingleAppointment = (props) => {
     {
       time && <ListItem>
         <ListItemIcon><ScheduleOutlinedIcon /></ListItemIcon>
-        <ListItemText primary={`${moment(time).format('HH:MM, dddd, MMMM Do, YYYY')}`} />
+        <ListItemText primary={`${moment(time).format('HH:mm, dddd, MMMM Do, YYYY')}`} />
       </ListItem>
     }
   </List>;

@@ -39,7 +39,7 @@ const sendAppointmentConfirmation = async ({ to, appointment, vehicle, contact }
 - Service: ${APPOINTMENT_TYPE_LIST[appointment.appointmentType].primary};
 - Price: ${APPOINTMENT_TYPE_LIST[appointment.appointmentType].secondary};
 - Vehicle: ${VEHICLE_TYPE_LIST[vehicle.vehicleType - 1]};
-- Time: ${moment(appointment.time).format('HH:MM, dddd, MMMM Do, YYYY')};
+- Time: ${moment(appointment.time).format('HH:mm, dddd, MMMM Do, YYYY')};
 - Contact:
   - Name: ${contact.name};
   - Tel: ${contact.telephoneNumber};
@@ -54,7 +54,7 @@ const sendCancellationConfirmation = async ({ to, time }) => {
   return await sendMail({
     to,
     subject: 'Concellation Confirmation',
-    text: `Your appointment, schduled for ${moment(time).format('HH:MM, dddd, MMMM Do, YYYY')}, has been cancelled successfully.`,
+    text: `Your appointment, schduled for ${moment(time).format('HH:mm, dddd, MMMM Do, YYYY')}, has been cancelled successfully.`,
   });
 };
 
@@ -62,7 +62,7 @@ const sendAppointmentRescheduling = async ({ to, oTime, nTime }) => {
   return await sendMail({
     to,
     subject: 'Rescheduling Confirmation',
-    text: `Your appointment, schduled for ${moment(oTime).format('HH:MM, dddd, MMMM Do, YYYY')}, has been rescheduled for ${moment(nTime).format('HH:MM, dddd, MMMM Do, YYYY')}.`
+    text: `Your appointment, schduled for ${moment(oTime).format('HH:mm, dddd, MMMM Do, YYYY')}, has been rescheduled for ${moment(nTime).format('HH:mm, dddd, MMMM Do, YYYY')}.`
   });
 };
 
