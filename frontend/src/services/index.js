@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import store from '../redux/store';
+import { removeUserData } from '../redux/actions';
 
 const service = axios.create({
   baseURL: 'http://gabrielndavid.live/api',
@@ -21,7 +22,8 @@ service.interceptors.response.use(
     const { response } = error;
     if (!response) return Promise.reject(error);
 
-    const { data } = response;
+    const { data, status } = response;
+    if (status === 401) store.dispatch(removeUserData());
     if (!data || !data.message) return Promise.reject(error);
     return Promise.reject(new Error(data.message));
   }

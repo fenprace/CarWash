@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Radio from '@material-ui/core/Radio';
 
 import NotInterestedOutlinedIcon from '@material-ui/icons/NotInterestedOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
@@ -13,12 +15,13 @@ import VehicleDialog from './VehicleDialog';
 import { vehicleTypeToString } from '../utils';
 
 const VehicleList = (props) => {
-  const { items, id, onUpdate } = props;
+  const { items, id, onUpdate, selectable, onSelect, selected, displayAdd } = props;
 
   const [showingDialog, setShowingDialog] = useState(false);
 
   const handleAddVehicle = () => setShowingDialog(true);
   const handleCloseVehicle = () => setShowingDialog(false);
+  const handleSelect = value => onSelect && onSelect(value);
 
   const addVehicleListItem = <>
     <ListItem
@@ -48,16 +51,26 @@ const VehicleList = (props) => {
   return <>
     {
       items.map(i => {
-        return <ListItem key={i.id}>
+        return <ListItem key={i.id} button={selectable} onClick={() => handleSelect(i.id)}>
           <ListItemIcon><DriveEtaIcon /></ListItemIcon>
           <ListItemText
             primary={vehicleTypeToString(i.vehicleType)}
             secondary={i.description}
           />
+
+          {
+            selectable && <ListItemSecondaryAction>
+              <Radio
+                value={i.id}
+                checked={selected === i.id}
+                onChange={() => handleSelect(i.id)}
+              />
+            </ListItemSecondaryAction>
+          }
         </ListItem>;
       })
     }
-    {addVehicleListItem}
+    {displayAdd === false || addVehicleListItem}
   </>;
 };
 
@@ -65,6 +78,10 @@ VehicleList.propTypes = {
   items: PropTypes.array,
   id: PropTypes.number,
   onUpdate: PropTypes.func,
+  selectable: PropTypes.bool,
+  onSelect: PropTypes.func,
+  selected: PropTypes.number,
+  displayAdd: PropTypes.bool,
 };
 
 export default VehicleList;

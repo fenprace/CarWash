@@ -8,14 +8,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Grid from '@material-ui/core/Grid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withSnackbar } from 'notistack';
 
 import { useAddContact } from '../hooks';
 import useFields from '../hooks/useFields';
+import CSSGrid from './CSSGrid';
 
-const required = value => value.length !== 0;
+const required = value => value !== undefined
+  && value !== null
+  && value.length !== 0;
 
 const ContactDialog = (props) => {
   const { isVisible, onClose, id, enqueueSnackbar, onUpdate } = props;
@@ -36,7 +38,7 @@ const ContactDialog = (props) => {
     suburb: required,
     state: required,
     telephoneNumber: required,
-    postalCode: value => value.length === 4 && !isNaN(value),
+    postalCode: value => value && value.length === 4 && !isNaN(value),
   });
 
   const theme = useTheme();
@@ -46,23 +48,22 @@ const ContactDialog = (props) => {
     e.preventDefault();
     e.stopPropagation();
 
-    validateAll();
-    if (!checkAll()) return;
-
-    request({ id, ...fields })
-      .then(() => {
-        enqueueSnackbar('Add Contact Successfully.', {
-          variant: 'success',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+    if (validateAll()) {
+      request({ id, ...fields })
+        .then(() => {
+          enqueueSnackbar('Add Contact Successfully.', {
+            variant: 'success',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+          onUpdate();
+          onClose();
+        }).catch(error => {
+          enqueueSnackbar(error.message, {
+            variant: 'error',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
         });
-        onUpdate();
-        onClose();
-      }).catch(error => {
-        enqueueSnackbar(error.message, {
-          variant: 'error',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        });
-      });
+    }
   };
 
   return <Dialog
@@ -73,22 +74,22 @@ const ContactDialog = (props) => {
     <form onSubmit={handleSubmit}>
       <DialogTitle>Add a Contact</DialogTitle>
       <DialogContent dividers>
-        <Grid container spacing={1} >
-          <Grid item xs={12}>
+        <CSSGrid container>
+          <CSSGrid item xs={12}>
             <TextField
               fullWidth
               label='Full Name'
               margin='dense'
               variant='outlined'
               name='name'
-              autocomplete='name'
+              autoComplete='name'
               error={errors.name}
               onChange={e => updateAndValidate('name', e.target.value) }
               helperText={ errors.name && 'Pleas enter your name.' }
             />
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={12}>
+          <CSSGrid item xs={12}>
             <TextField
               fullWidth
               multiline
@@ -97,54 +98,54 @@ const ContactDialog = (props) => {
               margin='dense'
               variant='outlined'
               name='street'
-              autocomplete='shipping street-address'
+              autoComplete='shipping street-address'
               error={errors.street}
               onChange={e => updateAndValidate('street', e.target.value) }
               helperText={ errors.street && 'Pleas enter the street address.' }
             />
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={4}>
+          <CSSGrid item xs={4}>
             <TextField
               label='Suburb'
               margin='dense'
               variant='outlined'
               name='suburb'
-              autocomplete='shipping locality'
+              autoComplete='shipping address-level3'
               error={errors.suburb}
               onChange={e => updateAndValidate('suburb', e.target.value) }
               helperText={ errors.suburb && 'Pleas enter the suburb.' }
             />
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={4}>
+          <CSSGrid item xs={4}>
             <TextField
               label='State'
               margin='dense'
               variant='outlined'
               name='state'
-              autocomplete='shipping region'
+              autoComplete='shipping address-level2'
               error={errors.state}
               onChange={e => updateAndValidate('state', e.target.value) }
               helperText={ errors.state && 'Pleas enter the state.' }
             />
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={4}>
+          <CSSGrid item xs={4}>
             <TextField
               label='Postal Code'
               margin='dense'
               variant='outlined'
               name='postalCode'
               type='number'
-              autocomplete='shipping postal-code'
+              autoComplete='shipping postal-code'
               error={errors.postalCode}
               onChange={e => updateAndValidate('postalCode', e.target.value) }
               helperText={ errors.postalCode && 'Pleas enter your valid postalCode.' }
             />
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={5}>
+          <CSSGrid item xs={5}>
             <TextField
               select
               fullWidth
@@ -159,22 +160,22 @@ const ContactDialog = (props) => {
               <MenuItem value={1}>Home</MenuItem>
               <MenuItem value={2}>Office</MenuItem>
             </TextField>
-          </Grid>
+          </CSSGrid>
 
-          <Grid item xs={7}>
+          <CSSGrid item xs={7}>
             <TextField
               fullWidth
               label='Tel'
               margin='dense'
               variant='outlined'
               name='telephoneNumber'
-              autocomplete='tel'
+              autoComplete='tel'
               error={errors.telephoneNumber}
               onChange={e => updateAndValidate('telephoneNumber', e.target.value) }
               helperText={ errors.telephoneNumber && 'Pleas enter your telephone number.' }
             />
-          </Grid>
-        </Grid>
+          </CSSGrid>
+        </CSSGrid>
       </DialogContent>
 
       <DialogActions>
