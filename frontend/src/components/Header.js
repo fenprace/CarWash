@@ -38,17 +38,20 @@ const Header = (props) => {
             ? <>
               <Button
                 color='inherit'
+                to='/book'
+                component={Link}
+              >Book</Button>
+
+              <Button
+                color='inherit'
                 to='/user/1'
                 component={Link}
-              >
-                Profile
-              </Button>
+              >Profile</Button>
+              
               <Button
                 color='inherit'
                 onClick={handleLogOut}
-              >
-                Log Out
-              </Button>
+              >Log Out</Button>
             </>
             : <>
               <Button

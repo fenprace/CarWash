@@ -8,6 +8,12 @@ export const read = async ({ id }) => {
   return (await service.get(`/appointment/${id}`)).data;
 };
 
+export const readAll = async ({ page = 1, pageSize = 10 }) => {
+  return await service.get('/appointment', {
+    params: { page, pageSize },
+  });
+};
+
 const AppointmentService = {
   readTimeSlots,
   read,

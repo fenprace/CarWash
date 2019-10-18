@@ -15,7 +15,9 @@ import { useAddContact } from '../hooks';
 import useFields from '../hooks/useFields';
 import CSSGrid from './CSSGrid';
 
-const required = value => value.length !== 0;
+const required = value => value !== undefined
+  && value !== null
+  && value.length !== 0;
 
 const ContactDialog = (props) => {
   const { isVisible, onClose, id, enqueueSnackbar, onUpdate } = props;
@@ -36,7 +38,7 @@ const ContactDialog = (props) => {
     suburb: required,
     state: required,
     telephoneNumber: required,
-    postalCode: value => value.length === 4 && !isNaN(value),
+    postalCode: value => value && value.length === 4 && !isNaN(value),
   });
 
   const theme = useTheme();
@@ -46,23 +48,22 @@ const ContactDialog = (props) => {
     e.preventDefault();
     e.stopPropagation();
 
-    validateAll();
-    if (!checkAll()) return;
-
-    request({ id, ...fields })
-      .then(() => {
-        enqueueSnackbar('Add Contact Successfully.', {
-          variant: 'success',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+    if (validateAll()) {
+      request({ id, ...fields })
+        .then(() => {
+          enqueueSnackbar('Add Contact Successfully.', {
+            variant: 'success',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+          onUpdate();
+          onClose();
+        }).catch(error => {
+          enqueueSnackbar(error.message, {
+            variant: 'error',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
         });
-        onUpdate();
-        onClose();
-      }).catch(error => {
-        enqueueSnackbar(error.message, {
-          variant: 'error',
-          anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        });
-      });
+    }
   };
 
   return <Dialog

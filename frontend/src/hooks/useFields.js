@@ -17,10 +17,10 @@ const useFields = (initialFields, constraints) => {
   const [errors, setErrors] = useState(initialErrors);
 
   const updateField = (field, value) => {
-    setFields({
-      ...fields,
+    setFields(f => ({
+      ...f,
       [field]: value,
-    });
+    }));
   };
 
   const validateField = (field, instantValue) => {
@@ -41,7 +41,7 @@ const useFields = (initialFields, constraints) => {
   };
 
   const synchronizeError = (field, instantValue) => {
-    setErrors({ ...errors, [field]: !validateField(field, instantValue) });
+    setErrors(e => ({ ...e, [field]: !validateField(field, instantValue) }));
   };
 
   const validateAll = () => {
@@ -51,6 +51,8 @@ const useFields = (initialFields, constraints) => {
     }, {});
 
     setErrors(results);
+
+    return !Object.values(results).some(e => e);
   };
 
   const updateAndValidate = (field, value) => {

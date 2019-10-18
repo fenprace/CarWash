@@ -1,4 +1,5 @@
 import { UPDATE_TOKEN, REMOVE_TOKEN, UPDATE_USER_DATA, REMOVE_USER_DATA } from './actionTypes';
+import history from '../utils/history';
 
 export const updateToken = token => {
   return dispatch => {
@@ -29,6 +30,7 @@ export const updateUserData = ({ token, id, role }) => {
 };
 
 export const removeUserData = () => {
+  history.push('/login');
   return dispatch => {
     window.localStorage.removeItem('userData');
     dispatch({ type: REMOVE_USER_DATA });

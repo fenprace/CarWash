@@ -1,8 +1,12 @@
 import { useState } from 'react';
 
-const useRequest = _request => {
+const useRequest = (_request, _initialData) => {
+  const initialData = _initialData === undefined
+    ? {}
+    : _initialData;
+
   const [isPending, setIsPending] = useState(true);
-  const [sourceData, setSourceData] = useState({});
+  const [sourceData, setSourceData] = useState(initialData);
 
   const request = (...parameters) => {
     setIsPending(true);

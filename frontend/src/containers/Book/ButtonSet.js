@@ -9,13 +9,11 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(4),
     float: 'right',
   },
-  button: {
-    marginRight: theme.spacing(1),
-  }
+  button: {}
 }));
 
 
-const StepButtonSet = props => {
+const ButtonSet = props => {
   const { onClear, onConfirm } = props;
   const classes = useStyles();
 
@@ -41,9 +39,9 @@ const StepButtonSet = props => {
   </div>;
 };
 
-StepButtonSet.propTypes = {
+ButtonSet.propTypes = {
   onClear: PropTypes.func,
   onConfirm: PropTypes.func,
 };
 
-export default StepButtonSet;
+export default ButtonSet;

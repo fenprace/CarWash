@@ -40,6 +40,12 @@ export const bookAppointment = async ({ id, appointmentType, time, contactId, ve
   return await service.post(`/user/${id}/appointment`, { appointmentType, time, contactId, vehicleIds });
 };
 
+export const readAppointment = async ({ id, page = 1, pageSize = 10 }) => {
+  return await service.get(`/user/${id}/appointment`, {
+    params: { page, pageSize }
+  });
+};
+
 const UserService = {
   logIn,
   register,
@@ -47,6 +53,7 @@ const UserService = {
   addVehicle,
   addContact,
   bookAppointment,
+  readAppointment,
 };
 
 export default UserService;

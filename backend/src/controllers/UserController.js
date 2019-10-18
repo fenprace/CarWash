@@ -44,7 +44,7 @@ router.post('/', async ctx => {
     role: 1,
   });
 
-  await sendGreeting({ id: email });
+  await sendGreeting({ to: email });
 
   ctx.status = 200;
 });
@@ -170,17 +170,27 @@ router.get('/:id/appointment', async ctx => {
   }
 
   const user = await User.findByPk(id);
-  
   if (!user) throw new NotFoundError;
 
-  const appointments = await user.getAppointments({
+  const { pageSize = 10, page = 1 } = ctx.request.query;
+
+  const appointments = await Appointment.findAndCountAll({
+    where: { userId: user.id },
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
+    order: [['id', 'DESC']],
     include: [
+      { model: User },
       { model: Vehicle },
       { model: Contact },
     ],
   });
 
-  ctx.body = { data: appointments.map(v => v.dataValues) };
+  ctx.body = {
+    page, pageSize,
+    total: appointments.count,
+    data: appointments.rows.map(r => r.toJSON()),
+  };
 });
 
 router.post('/:id/appointment', async ctx => {
@@ -221,7 +231,7 @@ router.post('/:id/appointment', async ctx => {
 
   const appointment = await Appointment.create({ appointmentType, description, time: date });
   await appointment.setContact(contact);
-  await appointment.addVehicles(vehicles);
+  await appointment.setVehicles(vehicles);
   await user.addAppointment(appointment);
 
   await sendAppointmentConfirmation({
