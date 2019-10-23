@@ -66,7 +66,7 @@ router.get('/:id', async ctx => {
   });
 
   if (!appointment) throw new NotFoundError;
-  if (ctx.state.user.id != appointment.user.id) throw new PermissionDeniedError;
+  if (ctx.state.user.id != appointment.user.id && ctx.state.user.role != 0) throw new PermissionDeniedError;
 
   const { appointmentType, time, description, id: _id } = appointment.dataValues;
 
