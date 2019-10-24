@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 
 import LocalCarWashIcon from '@material-ui/icons/LocalCarWash';
 import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
+import FeedbackOutlinedIcon from '@material-ui/icons/FeedbackOutlined';
 
 import ContactList from '../components/ContactList';
 import VehicleList from '../components/VehicleList';
@@ -20,7 +21,7 @@ import { APPOINTMENT_TYPE_LIST } from '../utils';
 
 const SingleAppointment = (props) => {
   const { id, appointment, displayView = true } = props;
-  const { contact, vehicles, appointmentType, time, id: aid } = appointment;
+  const { contact, vehicles, appointmentType, time, description, id: aid } = appointment;
 
   return <List>
     <ListSubheader>
@@ -74,6 +75,17 @@ const SingleAppointment = (props) => {
         <ListItemIcon><ScheduleOutlinedIcon /></ListItemIcon>
         <ListItemText primary={`${moment(time).format('HH:mm, dddd, MMMM Do, YYYY')}`} />
       </ListItem>
+    }
+
+    
+    {
+      description && description !== '' && <>
+        <ListSubheader>Message</ListSubheader>
+        <ListItem>
+          <ListItemIcon><FeedbackOutlinedIcon /></ListItemIcon>
+          <ListItemText primary={description} />
+        </ListItem>
+      </>
     }
   </List>;
 };
