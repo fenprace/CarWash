@@ -9,6 +9,7 @@ import ServicePicker from './ServicePicker';
 import VehiclePicker from './VehiclePicker';
 import ContactPicker from './ContactPicker';
 import TimeSlotPicker from './TimeSlotPicker';
+import Description from './Description';
 import ButtonSet from './ButtonSet';
 import { read, bookAppointment } from '../../services/UserService';
 import useRequest from '../../hooks/useRequest';
@@ -22,13 +23,12 @@ const Book = props => {
     time: null,
     contactId: -1,
     vehicleIds: [],
-    description: null,
+    description: '',
     timeSet: false,
   });
 
   const { request: readUser, sourceData } = useRequest(read);
   const { request: book } = useRequest(bookAppointment);
-  
 
   const handleChange = change => setAppointment(a => ({ ...a, ...change }));
   const handleUpdate = () => readUser({ id });
@@ -76,6 +76,7 @@ const Book = props => {
     <VehiclePicker user={sourceData} appointment={appointment} onChange={handleChange} onUpdate={handleUpdate} />
     <ContactPicker user={sourceData} appointment={appointment} onChange={handleChange} onUpdate={handleUpdate} />
     <TimeSlotPicker appointment={appointment} onChange={handleChange} />
+    <Description appointment={appointment} onChange={handleChange} />
 
     <ButtonSet onConfirm={handleConfirm} />
   </Container>;

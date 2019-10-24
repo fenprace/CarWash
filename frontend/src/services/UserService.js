@@ -36,8 +36,8 @@ export const addContact = async parameters => {
   return (await service.post(`/user/${id}/contact`, data)).data;
 };
 
-export const bookAppointment = async ({ id, appointmentType, time, contactId, vehicleIds }) => {
-  return await service.post(`/user/${id}/appointment`, { appointmentType, time, contactId, vehicleIds });
+export const bookAppointment = async ({ id, appointmentType, time, contactId, vehicleIds, description }) => {
+  return await service.post(`/user/${id}/appointment`, { appointmentType, time, contactId, vehicleIds, description });
 };
 
 export const readAppointment = async ({ id, page = 1, pageSize = 10 }) => {
